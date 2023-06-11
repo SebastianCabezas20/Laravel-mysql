@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use SebastianBergmann\Environment\Console;
 
 class ProductController extends Controller
 {
@@ -13,7 +14,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return Product::all();
     }
 
     /**
@@ -29,7 +30,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        /*return Product::create([
+            "nombre" => $request->nombre,
+            "stock" => $request->stock,
+            "precio" => $request->precio,
+            "descripcion" => $request->descripcion,
+            "descuento" => $request->descuento,
+            "brand_id" => $request->brand_id
+        ]);*/
+
+
+        $request->user();
+
+        return redirect("dashboard");
     }
 
     /**
@@ -37,7 +51,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return $product;
     }
 
     /**
@@ -53,7 +67,16 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $product->nombre = $request->nombre ? $request->nombre : $product->nombre;
+        $product->stock = $request->stock ? $request->stock : $product->stock;
+        $product->descripcion = $request->descripcion ? $request->descripcion : $product->descripcion;
+        $product->precio = $request->precio ? $request->precio : $product->precio;
+        $product->descuento = $request->descuento ? $request->descuento : $product->descuento;
+        $product->brand_id = $request->brand_id ? $request->brand_id : $product->brand_id;
+
+        return $product->save();
+
+
     }
 
     /**
@@ -61,6 +84,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+
+        return $product->delete();
     }
 }

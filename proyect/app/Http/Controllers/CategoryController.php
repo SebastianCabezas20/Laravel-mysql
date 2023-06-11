@@ -13,7 +13,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return Category::all();
     }
 
     /**
@@ -29,7 +29,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return Category::create([
+            "nombre" => $request->nombre,
+        ]);
     }
 
     /**
@@ -37,7 +39,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return $category;
     }
 
     /**
@@ -53,7 +55,9 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $category->nombre = $request->nombre ? $request->nombre : $category->nombre;
+
+        return $category->save();
     }
 
     /**
@@ -61,6 +65,6 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        return $category->delete();
     }
 }

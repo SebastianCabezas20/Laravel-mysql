@@ -11,7 +11,7 @@ class ModelProduct extends Model
 
     protected $fillable = [
         "descripcion",
-        //"product_id",
+        "product_id",
         "typemodel_id"
     ];
 

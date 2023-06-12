@@ -1,15 +1,23 @@
 import axios from "axios";
-import { useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
-
-export async function loader() {
-  const response = await axios.get("http://localhost:8000/api/product");
-  console.log(response);
-  return response.data;
-}
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Productos(params) {
-  const [productos, setProductos] = useState(useLoaderData());
+  const [productos, setProductos] = useState([]);
+
+  useEffect(() => {
+    async function loader() {
+      try {
+        const response = await axios.get("http://localhost:8000/api/product");
+        if (response.status === 200) {
+          setProductos(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    loader();
+  });
   return (
     <>
       <h1>Inventario productos</h1>

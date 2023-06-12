@@ -5,10 +5,11 @@ import App from "./App.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Crud from "./pages/Crud.jsx";
-import Productos, { loader as loaderroot } from "./pages/Productos.jsx";
+import Productos from "./pages/Productos.jsx";
 import ProductoEspecifico, {
   getProducto,
 } from "./pages/ProductoEspecifico.jsx";
+import Marcas from "./pages/Marcas.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,16 +23,18 @@ const router = createBrowserRouter([
   {
     path: "/crud/productos",
     element: <Productos />,
-    loader: loaderroot,
   },
   {
     path: "/crud/productos/:id",
     element: <ProductoEspecifico />,
-    loader: getProducto,
+  },
+  {
+    path: "/crud/marcas",
+    element: <Marcas />,
   },
   {
     path: "*",
-    element: <App />,
+    element: <Crud />,
   },
 ]);
 

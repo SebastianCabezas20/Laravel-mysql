@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function card({ nombre, des, img, url }) {
   return (
     <>
-      <div className="card" style={{ width: "18rem" }}>
+      <div className="card ms-4" style={{ width: "18rem" }}>
         <img src={img} className="card-img-top" alt="..." />
         <div className="card-body">
           <h5 className="card-title">{nombre}</h5>

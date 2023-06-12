@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Form, useLoaderData } from "react-router-dom";
+import { Form, useLoaderData, useParams } from "react-router-dom";
 
 export async function getProducto({ params }) {
   let response = await axios.get(
@@ -18,6 +18,7 @@ export default function ProductoEspecifico(params) {
   const { productoLoader, marcasLoader } = useLoaderData();
   const [producto, setProducto] = useState(productoLoader);
   const [marcas, setMarcas] = useState(marcasLoader);
+
   return (
     <>
       <div>
@@ -151,7 +152,10 @@ export default function ProductoEspecifico(params) {
             </div>
           </div>
         </Form>
-        <button className="btn btn-primary col-auto">Guardar</button>
+        <button className="btn btn-primary col-auto me-4 ms-4 mt-4">
+          Guardar
+        </button>
+        <button className="btn btn-danger col-auto ms-4 mt-4">Eliminar</button>
       </div>
     </>
   );

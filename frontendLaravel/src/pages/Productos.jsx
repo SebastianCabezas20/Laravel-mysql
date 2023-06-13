@@ -17,7 +17,19 @@ export default function Productos(params) {
       }
     }
     loader();
-  });
+  }, []);
+  async function onDelete(producto) {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/api/product/${producto.id}`
+      );
+      if (response.status === 200) {
+        setProductos(productos.filter((product) => product.id != producto.id));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
     <>
       <h1>Inventario productos</h1>
@@ -46,7 +58,12 @@ export default function Productos(params) {
                 </Link>
               </td>
               <td>
-                <Link className="btn btn-danger">Eliminar</Link>
+                <Link
+                  className="btn btn-danger"
+                  onClick={() => onDelete(producto)}
+                >
+                  Eliminar
+                </Link>
               </td>
             </tr>
           ))}

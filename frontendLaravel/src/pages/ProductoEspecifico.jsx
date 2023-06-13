@@ -1,23 +1,39 @@
 import axios from "axios";
-import { useState } from "react";
-import { Form, useLoaderData, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Form, useParams } from "react-router-dom";
 
-export async function getProducto({ params }) {
-  let response = await axios.get(
-    `http://localhost:8000/api/product/${params.id}`
-  );
-  const productoLoader = response.data;
-  response = await axios.get(`http://localhost:8000/api/brand`);
-  const marcasLoader = response.data;
-  console.log(productoLoader);
-  console.log(marcasLoader);
-  return { productoLoader, marcasLoader };
-}
+export default function ProductoEspecifico(props) {
+  const [params, setParams] = useState(useParams());
+  const [producto, setProducto] = useState({});
+  const [marcas, setMarcas] = useState([]);
 
-export default function ProductoEspecifico(params) {
-  const { productoLoader, marcasLoader } = useLoaderData();
-  const [producto, setProducto] = useState(productoLoader);
-  const [marcas, setMarcas] = useState(marcasLoader);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const resProducto = await axios.get(
+          `http://localhost:8000/api/product/${params.id}`
+        );
+        console.log(resProducto);
+        if (resProducto.status === 200) {
+          setProducto(resProducto.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
+      try {
+        const resMarcas = await axios.get(`http://localhost:8000/api/brand`);
+        console.log(resMarcas);
+        if (resMarcas.status === 200) {
+          setMarcas(resMarcas.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getData();
+  }, []);
 
   return (
     <>

@@ -5,7 +5,8 @@ import { Form } from "react-router-dom";
 export default function Marcas(params) {
   const [marcas, setMarcas] = useState([]);
   const [marcaNueva, setMarcaNueva] = useState("");
-
+  const [updateMarca, setUpdateMarca] = useState({});
+  let componente = null;
   async function postMarca(marca) {
     try {
       const response = await axios.post("http://localhost:8000/api/brand", {
@@ -33,6 +34,30 @@ export default function Marcas(params) {
     }
   }
 
+  async function update() {
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/api/brand/${updateMarca.id}`,
+        { nombre: updateMarca.nombre }
+      );
+      if (response.status === 200) {
+        console.log(marcas);
+        const res = marcas.map((marca) => {
+          if (marca.id == updateMarca.id) {
+            marca.nombre = updateMarca.nombre;
+            return marca;
+          } else {
+            return marca;
+          }
+        });
+        setMarcas(res);
+        //console.log(marcas);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -45,6 +70,32 @@ export default function Marcas(params) {
     }
     fetchData();
   }, []);
+
+  if (Object.keys(updateMarca).length != 0) {
+    componente = (
+      <Form className="mt-3">
+        <div className="row">
+          <label htmlFor="nombre" className=" col-2 form-label">
+            Nombre
+          </label>
+          <div className="col-7">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Editar"
+              value={updateMarca.nombre}
+              onChange={(e) =>
+                setUpdateMarca({ ...updateMarca, nombre: e.target.value })
+              }
+            />
+          </div>
+          <button className="btn btn-primary col-3" onClick={() => update()}>
+            Actualizar marca
+          </button>
+        </div>
+      </Form>
+    );
+  }
 
   return (
     <>
@@ -72,7 +123,12 @@ export default function Marcas(params) {
                     </button>
                   </td>
                   <td>
-                    <button className="btn btn-primary">Seleccionar</button>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => setUpdateMarca(marca)}
+                    >
+                      Seleccionar
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -104,22 +160,7 @@ export default function Marcas(params) {
             </div>
           </Form>
 
-          <h4 className="mt-4">Editar nombre de la marca</h4>
-          <Form>
-            <div className="row">
-              <label htmlFor="nombre" className=" col-2 form-label">
-                Nombre
-              </label>
-              <div className="col-7">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Editar"
-                />
-              </div>
-              <button className="btn btn-primary col-2">Editar</button>
-            </div>
-          </Form>
+          {componente}
         </div>
       </div>
     </>

@@ -6,9 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Crud from "./pages/Crud.jsx";
 import Productos from "./pages/Productos.jsx";
-import ProductoEspecifico, {
-  getProducto,
-} from "./pages/ProductoEspecifico.jsx";
+import ProductoEspecifico from "./pages/ProductoEspecifico.jsx";
 import Marcas from "./pages/Marcas.jsx";
 
 const router = createBrowserRouter([

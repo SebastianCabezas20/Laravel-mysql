@@ -41,7 +41,6 @@ class ProductController extends Controller
         ]);*/
 
 
-        $request->user();
 
         return redirect("dashboard");
     }
@@ -51,7 +50,12 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return $product;
+        return [
+            "producto" => $product,
+            "specs" => $product->specifications()->get(),
+            "modelo" => $product->modelproducts()->with("typeModel")->get(),
+            "categorias" => $product->categories()->get()
+        ];
     }
 
     /**

@@ -16,6 +16,6 @@ class ModelProductSeeder extends Seeder
      */
     public function run(): void
     {
-        ModelProduct::factory()->count(2)->for(Product::factory()->for(Brand::factory()))->for(TypeModel::factory())->create();
+        //ModelProduct::factory()->count(2)->for(Product::factory()->for(Brand::factory()))->for(TypeModel::factory())->create();
     }
 }

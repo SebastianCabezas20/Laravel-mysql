@@ -16,6 +16,6 @@ class SpecificationSeeder extends Seeder
      */
     public function run(): void
     {
-        Specification::factory()->count(3)->for(Product::factory()->for(Brand::factory()))->create();
+        //Specification::factory()->count(3)->for(Product::factory()->for(Brand::factory()))->create();
     }
 }

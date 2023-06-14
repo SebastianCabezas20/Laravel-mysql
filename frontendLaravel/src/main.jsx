@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 //import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.js";
+import "@popperjs/core";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Crud from "./pages/Crud.jsx";
 import Productos from "./pages/Productos.jsx";

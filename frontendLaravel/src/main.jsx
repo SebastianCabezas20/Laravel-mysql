@@ -10,6 +10,7 @@ import Crud from "./pages/Crud.jsx";
 import Productos from "./pages/Productos.jsx";
 import ProductoEspecifico from "./pages/ProductoEspecifico.jsx";
 import Marcas from "./pages/Marcas.jsx";
+import CreateProduct from "./pages/CreateProduct.jsx";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/crud/marcas",
     element: <Marcas />,
+  },
+  {
+    path: "/crud/productos/create",
+    element: <CreateProduct />,
   },
   {
     path: "*",

@@ -51,7 +51,6 @@ export default function Marcas(params) {
           }
         });
         setMarcas(res);
-        //console.log(marcas);
       }
     } catch (error) {
       console.error(error);

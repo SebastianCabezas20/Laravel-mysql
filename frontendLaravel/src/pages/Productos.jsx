@@ -32,7 +32,16 @@ export default function Productos(params) {
   }
   return (
     <>
-      <h1>Inventario productos</h1>
+      <div className="row">
+        <h1 className="col-8 d-flex justify-content-end ">
+          Inventario productos
+        </h1>
+        <div className=" col-4 d-flex justify-content-end  ">
+          <Link to={"create"} className="btn btn-warning  col-6" type="button">
+            Agregar un producto al inventario
+          </Link>
+        </div>
+      </div>
 
       <table className="table">
         <thead>

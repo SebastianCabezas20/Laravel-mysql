@@ -13,7 +13,7 @@ class TypeModelController extends Controller
      */
     public function index()
     {
-        //
+        return TypeModel::all();
     }
 
     /**

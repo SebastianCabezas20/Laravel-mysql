@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
+use App\Models\TypeModel;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class ViewController extends Controller
 {
-    public function all()
+    public function createProduct()
     {
-        return Inertia::render("Admin/All", ["producto" => "holas"]);
+        return [
+            "marcas" => Brand::all(),
+            "tipo_modelos" => TypeModel::all()
+
+        ];
     }
 }

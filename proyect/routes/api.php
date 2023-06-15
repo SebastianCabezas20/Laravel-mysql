@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\ViewController;
+use App\Models\TypeModel;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
@@ -20,8 +23,12 @@ Route::resources(
     [
         "product" => ProductController::class,
         "brand" => BrandController::class,
+        //"type_model" => TypeModel::class,
     ]
 );
+
+Route::get("/createProduct", [ViewController::class, "createProduct"]);
+
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

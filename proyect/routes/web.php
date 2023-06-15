@@ -41,7 +41,6 @@ Route::resources(
     ]
 );
 
-Route::get('/all', [ViewController::class, "all"]);
 
 
 Route::middleware('auth')->group(function () {

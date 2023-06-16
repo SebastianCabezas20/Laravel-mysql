@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Http\Controllers\Controller;
+use App\Models\TypeModel;
 use Illuminate\Http\Request;
 use SebastianBergmann\Environment\Console;
 
@@ -31,18 +32,32 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
-        /*return Product::create([
-            "nombre" => $request->nombre,
-            "stock" => $request->stock,
-            "precio" => $request->precio,
-            "descripcion" => $request->descripcion,
-            "descuento" => $request->descuento,
-            "brand_id" => $request->brand_id
-        ]);*/
+        $product = Product::create([
+            "nombre" => $request->producto["nombre"],
+            "stock" => $request->producto["stock"],
+            "precio" => $request->producto["precio"],
+            "descripcion" => $request->producto["descripcion"],
+            "descuento" => $request->producto["descuento"],
+            "brand_id" => $request->producto["brand_id"]
+        ]);
+
+        $product->specifications()->createMany($request->especificaciones);
+
+        $modelos = $request->modelo["modelos"];
+
+
+        return $product->modelproducts()->createMany(array_map(function ($modelo) use ($request) {
+            return [
+                'typemodel_id' => $request->modelo["tipo"],
+                "descripcion" => $modelo
+
+            ];
+        }, $modelos));
 
 
 
-        return redirect("dashboard");
+
+
     }
 
     /**
@@ -50,6 +65,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+
         return [
             "producto" => $product,
             "specs" => $product->specifications()->get(),

@@ -40,19 +40,32 @@ class ProductController extends Controller
             "descuento" => $request->producto["descuento"],
             "brand_id" => $request->producto["brand_id"]
         ]);
-
+        //Insercion de especificaciones segun el producto
         $product->specifications()->createMany($request->especificaciones);
 
+
+
+
+        //Enlace de modelos, tipo de modelo y productos
         $modelos = $request->modelo["modelos"];
-
-
-        return $product->modelproducts()->createMany(array_map(function ($modelo) use ($request) {
+        $product->modelproducts()->createMany(array_map(function ($modelo) use ($request) {
             return [
                 'typemodel_id' => $request->modelo["tipo"],
                 "descripcion" => $modelo
 
             ];
         }, $modelos));
+
+        $categorias = $request->categorias;
+
+        foreach ($categorias as $categoria) {
+            $product->categories()->attach($categoria["id"]);
+        }
+
+        //Insercion de categorias segun producto
+        return $product->categories()->createMany($request->categoriasNuevas);
+
+
 
 
 

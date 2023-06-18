@@ -11,7 +11,25 @@ export default function ProductoEspecifico(props) {
   const [specs, setSpecs] = useState([]);
   const [marcas, setMarcas] = useState([]);
   const [modelos, setModelos] = useState([]);
-  const [categorias, setCategorias] = useState([]);
+  const [categorias, setCategorias] = useState({
+    borradas: [],
+    totales: [],
+    nuevas: [],
+  });
+
+  function actualizarCategorias(categoria) {
+    setCategorias((antes) => {
+      const categoriasActualizadas = antes.totales.filter(
+        (cat) => cat.nombre !== categoria.nombre
+      );
+      const categoriasBorradas = [...antes.borradas, categoria];
+      return {
+        ...antes,
+        totales: categoriasActualizadas,
+        borradas: categoriasBorradas,
+      };
+    });
+  }
 
   useEffect(() => {
     async function getData() {
@@ -30,7 +48,10 @@ export default function ProductoEspecifico(props) {
           typemodel_id
           type_model {id, tipo}
           */
-          setCategorias(resProducto.data.categorias);
+          setCategorias({
+            ...categorias,
+            totales: resProducto.data.categorias,
+          });
         }
       } catch (error) {
         console.log(error);
@@ -38,6 +59,7 @@ export default function ProductoEspecifico(props) {
 
       try {
         const resMarcas = await axios.get(`http://localhost:8000/api/brand`);
+        console.log("----------------");
         console.log(resMarcas);
         if (resMarcas.status === 200) {
           setMarcas(resMarcas.data);
@@ -171,7 +193,7 @@ export default function ProductoEspecifico(props) {
                   aria-label="Default select example"
                   name="marca"
                   id="marca"
-                  defaultValue={producto.brand_id}
+                  value={producto.brand_id}
                   onChange={(e) =>
                     setProducto({ ...producto, brand_id: e.target.value })
                   }
@@ -230,10 +252,11 @@ export default function ProductoEspecifico(props) {
             <div id="categorias">
               <h5>Categorias</h5>
               <div className="row">
-                {categorias.map((categoria) => (
+                {categorias.totales.map((categoria) => (
                   <CategoryComponent
                     categoria={categoria}
                     key={categoria.id}
+                    actualizar={() => actualizarCategorias(categoria)}
                   ></CategoryComponent>
                 ))}
               </div>

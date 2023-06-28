@@ -75,18 +75,18 @@ export default function EspecificacionBasica({
       </div>
 
       <div className="d-flex justify-content-center">
-        <div class="list-group mt-4 col-8 ">
+        <div className="list-group mt-4 col-8 ">
           {especificaciones.todas.map((spec) => (
             <a
-              class="list-group-item list-group-item-action"
+              className="list-group-item list-group-item-action"
               aria-current="true"
               key={spec.nombre}
             >
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">{spec.nombre}</h5>
+              <div className="d-flex w-100 justify-content-between">
+                <h5 className="mb-1">{spec.nombre}</h5>
               </div>
               <div className="row">
-                <p class="mb-1 col-11">{spec.descripcion}</p>
+                <p className="mb-1 col-11">{spec.descripcion}</p>
                 <button
                   className="btn-close col-1"
                   onClick={() =>

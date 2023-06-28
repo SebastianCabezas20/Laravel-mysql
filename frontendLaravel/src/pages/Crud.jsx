@@ -9,13 +9,13 @@ export default function Crud() {
       nombre: "productos inventario",
       des: "Una descripcion basica",
       img: logo,
-      url: "productos",
+      url: "/crud/productos",
     },
     marcas: {
       nombre: "Marcas disponibles",
       des: "Marcas de los distintos productos",
       img: marca,
-      url: "marcas",
+      url: "/crud/marcas",
     },
   });
   return (

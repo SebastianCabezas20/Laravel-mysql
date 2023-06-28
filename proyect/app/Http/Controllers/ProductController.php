@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
 use App\Models\TypeModel;
 use Illuminate\Http\Request;
-use SebastianBergmann\Environment\Console;
 
 class ProductController extends Controller
 {
@@ -32,29 +32,71 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
-        $product = Product::create([
-            "nombre" => $request->producto["nombre"],
-            "stock" => $request->producto["stock"],
-            "precio" => $request->producto["precio"],
-            "descripcion" => $request->producto["descripcion"],
-            "descuento" => $request->producto["descuento"],
-            "brand_id" => $request->producto["brand_id"]
-        ]);
+        if ($request->producto["brand_id"] == -1) {
+            // Se crea la marca
+            $marca = Brand::create([
+                "nombre" => $request->marcaNueva[0],
+            ]);
+            // Se crea el producto enlazando esa marca
+            $product = Product::create([
+                "nombre" => $request->producto["nombre"],
+                "stock" => $request->producto["stock"],
+                "precio" => $request->producto["precio"],
+                "descripcion" => $request->producto["descripcion"],
+                "descuento" => $request->producto["descuento"],
+                "brand_id" => $marca->id
+            ]);
+
+
+        } else {
+            // Producto con marca ya creada
+            $product = Product::create([
+                "nombre" => $request->producto["nombre"],
+                "stock" => $request->producto["stock"],
+                "precio" => $request->producto["precio"],
+                "descripcion" => $request->producto["descripcion"],
+                "descuento" => $request->producto["descuento"],
+                "brand_id" => $request->producto["brand_id"]
+            ]);
+        }
+
+
         //Insercion de especificaciones segun el producto
         $product->specifications()->createMany($request->especificaciones);
 
 
-
-
         //Enlace de modelos, tipo de modelo y productos
-        $modelos = $request->modelo["modelos"];
-        $product->modelproducts()->createMany(array_map(function ($modelo) use ($request) {
-            return [
-                'typemodel_id' => $request->modelo["tipo"],
-                "descripcion" => $modelo
 
-            ];
-        }, $modelos));
+        if ($request->modelo["tipo"] == -1) { // Caso no existe el tipo modelo
+            // Se crea el tipo en la base de datos
+            $tipo = TypeModel::Create([
+                "tipo" => $request->modelo["tipoNuevo"][0]
+
+            ]);
+
+            $modelos = $request->modelo["modelos"];
+            $product->modelproducts()->createMany(array_map(function ($modelo) use ($tipo) {
+                return [
+                    'typemodel_id' => $tipo->id,
+                    "descripcion" => $modelo
+
+                ];
+            }, $modelos));
+
+
+        } else {
+            // Caso contrario, el tipo ya existe y se enlaza con el producto
+            $modelos = $request->modelo["modelos"];
+            $product->modelproducts()->createMany(array_map(function ($modelo) use ($request) {
+                return [
+                    'typemodel_id' => $request->modelo["tipo"],
+                    "descripcion" => $modelo
+
+                ];
+            }, $modelos));
+        }
+
+
 
         $categorias = $request->categorias;
 

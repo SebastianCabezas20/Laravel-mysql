@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import InformacionBasica from "../components/CreateProduct/InformacionBasica";
 import ModelosBasicos from "../components/CreateProduct/ModelosBasicos";
 import CategoriaBasica from "../components/CreateProduct/CategoriaBasica";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import EspecificacionBasica from "../components/CreateProduct/EspecificacionBasica";
 
 export default function CreateProduct(params) {
-  const [marcas, setMarcas] = useState([]);
+  const [marcas, setMarcas] = useState({
+    marcas: [],
+    marcaNueva: [],
+  });
   const [nuevoProducto, setNuevoProducto] = useState({
     nombre: "",
     descripcion: "",
@@ -24,29 +27,30 @@ export default function CreateProduct(params) {
 
   const [Modelos, setModelos] = useState({
     nombre: "",
+    tipoNuevo: [],
     tipo: null,
     modelos: [],
     tipos: [],
   });
 
-  const [categorias, setCategorias] = useState([]);
-  const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState([]);
-  const [categoriaNueva, setCategoriaNueva] = useState({
-    nombre: "",
-    categorias: [],
+  const [categorias, setCategorias] = useState({
+    categoriasBase: [], // Categorias ya descritas en la base de datos [{id,nombre}]
+    categoriasSeleccionadas: [], // Categorias que el usuario selecciono
+    nombre: "", // Nombre de nueva categoria
+    categoriasNuevas: [], //[{nombre:"",nombre:"",nombre:""}]
   });
 
   const navegate = useNavigate();
 
   useEffect(() => {
+    console.log(especificaciones);
     async function fetchData() {
       try {
         const res = await axios.get("http://localhost:8000/api/createProduct");
         if (res.status === 200) {
-          console.log(res.data);
-          setMarcas(res.data.marcas);
+          setMarcas({ ...marcas, marcas: res.data.marcas });
           setModelos({ ...Modelos, tipos: res.data.tipo_modelos });
-          setCategorias(res.data.categorias);
+          setCategorias({ ...categorias, categoriasBase: res.data.categorias });
         }
       } catch (error) {
         console.error(error);
@@ -63,10 +67,15 @@ export default function CreateProduct(params) {
       });
       const res = await axios.post("http://localhost:8000/api/product", {
         producto: nuevoProducto,
-        especificaciones: especificaciones,
-        modelo: { tipo: Modelos.tipo, modelos: Modelos.modelos },
-        categorias: categoriasSeleccionadas, ///{{nombre: ""},{"nombre: ""}} Existentes
-        categoriasNuevas: categoriaNueva.categorias, ///{{nombre: ""},{"nombre: ""}} // A enlazar
+        especificaciones: especificaciones.todas,
+        modelo: {
+          tipo: Modelos.tipo,
+          modelos: Modelos.modelos,
+          tipoNuevo: Modelos.tipoNuevo,
+        },
+        categorias: categorias.categoriasSeleccionadas, ///{{nombre: ""},{"nombre: ""}} Existentes
+        categoriasNuevas: categorias.categoriasNuevas, ///{{nombre: ""},{"nombre: ""}} // A enlazar
+        marcaNueva: marcas.marcaNueva, // A enlazar
       });
       if (res.status === 200) {
         navegate("/crud/productos");
@@ -82,6 +91,7 @@ export default function CreateProduct(params) {
           nuevoProducto={nuevoProducto}
           setNuevoProducto={setNuevoProducto}
           marcas={marcas}
+          setMarcas={setMarcas}
         ></InformacionBasica>
 
         <ModelosBasicos
@@ -91,10 +101,7 @@ export default function CreateProduct(params) {
 
         <CategoriaBasica
           categorias={categorias}
-          categoriaNueva={categoriaNueva}
-          setCategoriaNueva={setCategoriaNueva}
-          setCategoriasSeleccionadas={setCategoriasSeleccionadas}
-          categoriasSeleccionadas={categoriasSeleccionadas}
+          setCategorias={setCategorias}
         ></CategoriaBasica>
 
         <EspecificacionBasica

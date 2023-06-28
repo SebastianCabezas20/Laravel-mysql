@@ -1,6 +1,9 @@
+import ModalCreacionMarca from "../ModalCreacionMarca";
+
 export default function InformacionBasica({
   nuevoProducto,
   marcas,
+  setMarcas,
   setNuevoProducto,
 }) {
   return (
@@ -19,7 +22,6 @@ export default function InformacionBasica({
             name="nombre"
             id="nombre"
             className="form-control"
-            value={nuevoProducto.nombre}
             onChange={(e) =>
               setNuevoProducto({ ...nuevoProducto, nombre: e.target.value })
             }
@@ -35,7 +37,6 @@ export default function InformacionBasica({
             cols="30"
             rows="auto"
             className="form-control"
-            value={nuevoProducto.descripcion}
             onChange={(e) =>
               setNuevoProducto({
                 ...nuevoProducto,
@@ -97,29 +98,51 @@ export default function InformacionBasica({
         </div>
         <div className="col-8 mx-auto" id="marca">
           <h5>Seleccione la marca del producto</h5>
-          <select
-            className="form-label form-select"
-            defaultValue={1}
-            onChange={(e) =>
-              setNuevoProducto({
-                ...nuevoProducto,
-                brand_id: e.target.value,
-              })
-            }
-            name="marca"
-            id="marca"
-          >
-            <option disabled value={1}>
-              Seleccione una marca
-            </option>
-            {marcas.map((marca) => (
-              <option key={marca.id} value={marca.id}>
-                {marca.nombre}
-              </option>
-            ))}
-            <option>Agregar una marca nueva</option>
-          </select>
+          <div className="row">
+            <div className="col-10">
+              <select
+                className="form-label form-select"
+                defaultValue={1}
+                onChange={(e) =>
+                  setNuevoProducto({
+                    ...nuevoProducto,
+                    brand_id: e.target.value,
+                  })
+                }
+                name="marca"
+                id="marca"
+              >
+                <option disabled value={1}>
+                  Seleccione una marca
+                </option>
+                {marcas.marcas.map((marca) => (
+                  <option key={marca.id} value={marca.id}>
+                    {marca.nombre}
+                  </option>
+                ))}
+                {marcas.marcaNueva.map((marcaNueva) => (
+                  <option key={marcaNueva} value={-1}>
+                    {marcaNueva}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="col-2">
+              <button
+                type="button"
+                class="btn btn-primary "
+                data-bs-toggle="modal"
+                data-bs-target="#ModalMarca"
+              >
+                +
+              </button>
+            </div>
+          </div>
         </div>
+        <ModalCreacionMarca
+          setMarcas={setMarcas}
+          marcas={marcas}
+        ></ModalCreacionMarca>
       </div>
     </div>
   );

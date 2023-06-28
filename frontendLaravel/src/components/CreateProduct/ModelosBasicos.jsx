@@ -1,7 +1,10 @@
+import ModelCreacionModelo from "../ModelCreacionModelo";
+
 export default function ModelosBasicos({ Modelos, setModelos }) {
   /*
     Modelo{
     nombre: "",
+    tipoNuevo: [],
     tipo: null,
     modelos: [],
     tipos: [],
@@ -14,23 +17,43 @@ export default function ModelosBasicos({ Modelos, setModelos }) {
       <div className="col-6 ">
         <div id="tipo modelo" className="col-7 ms-2">
           <h5>Seleccione el tipo de modelo del producto</h5>
-          <select
-            defaultValue={1}
-            className="form-control form-select"
-            name="marca"
-            id="marca"
-            onChange={(e) => setModelos({ ...Modelos, tipo: e.target.value })}
-          >
-            <option disabled value={1}>
-              Seleccione una categoria
-            </option>
-            {Modelos.tipos.map((modelo) => (
-              <option key={modelo.id} value={modelo.id}>
-                {modelo.tipo}
-              </option>
-            ))}
-            <option value={4}>Agregar un tipo nuevo</option>
-          </select>
+          <div className="row">
+            <div className="col-10">
+              <select
+                defaultValue={1}
+                className="form-control form-select"
+                name="marca"
+                id="marca"
+                onChange={(e) =>
+                  setModelos({ ...Modelos, tipo: e.target.value })
+                }
+              >
+                <option disabled value={1}>
+                  Seleccione un tipo de modelo
+                </option>
+                {Modelos.tipos.map((modelo) => (
+                  <option key={modelo.id} value={modelo.id}>
+                    {modelo.tipo}
+                  </option>
+                ))}
+                {Modelos.tipoNuevo.map((modelo) => (
+                  <option key={modelo} value={-1}>
+                    {modelo}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="col-2">
+              <button
+                type="button"
+                class="btn btn-primary "
+                data-bs-toggle="modal"
+                data-bs-target="#ModalModelo"
+              >
+                +
+              </button>
+            </div>
+          </div>
         </div>
 
         <div id="modelos" className="col-12 mt-3">
@@ -92,6 +115,10 @@ export default function ModelosBasicos({ Modelos, setModelos }) {
           </ul>
         </div>
       </div>
+      <ModelCreacionModelo
+        modelo={Modelos}
+        set={setModelos}
+      ></ModelCreacionModelo>
     </div>
   );
 }

@@ -37,7 +37,11 @@ export default function Productos(params) {
           Inventario productos
         </h1>
         <div className=" col-4 d-flex justify-content-end  ">
-          <Link to={"create"} className="btn btn-warning  col-6" type="button">
+          <Link
+            to={"/crud/productos/create"}
+            className="btn btn-warning  col-6"
+            type="button"
+          >
             Agregar un producto al inventario
           </Link>
         </div>
@@ -62,7 +66,10 @@ export default function Productos(params) {
               <td>{producto.stock}</td>
               <td>{producto.descripcion}</td>
               <td>
-                <Link to={`${producto.id}`} className="btn btn-primary">
+                <Link
+                  to={`/crud/productos/${producto.id}`}
+                  className="btn btn-primary"
+                >
                   Modificar producto
                 </Link>
               </td>
